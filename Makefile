@@ -17,6 +17,10 @@ ft_printf.c \
 ft_format.c \
 ft_check.c \
 ft_address.c \
+ft_split.c \
+ft_substr.c \
+ft_strdup.c \
+ft_strlcat.c \
 
 OBJECTS =$(SRC:.c=.o)
 AR = ar rcs
