@@ -1,7 +1,6 @@
 CFLAGS = -Wall -Werror -Wextra
 
-SRC = ft_pipex.c \
-ft_pipex_utils.c \
+SRC =ft_pipex_utils.c \
 ft_putchar_fd.c \
 ft_putstr_fd.c \
 ft_putendl_fd.c \
@@ -31,12 +30,14 @@ all:$(NAME)
 
 $(NAME):$(OBJECTS)
 	$(AR) $(NAME) $^
+	cc $(CFLAGS) ft_pipex.c $(NAME) -o pipex
 
 clean :
 	rm -f $(OBJECTS) 
-	
-fclean : clean 
 	rm -f $(NAME)
+
+fclean : clean 
+	rm -f pipex
 
 re : fclean all
 

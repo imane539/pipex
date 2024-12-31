@@ -25,6 +25,7 @@ int	fdesc(char mode, char *file)
 	}
 	return (fd);
 }
+
 int	ft_execeve(char *cmd, char **envp)
 {
 	char	**argv;
@@ -40,14 +41,15 @@ int	ft_execeve(char *cmd, char **envp)
 		return (error("failed to exec :( "));
 	return (0);
 }
-int child(int fdin,int fdout,char *cmd,char **envp,int fdclose)
+
+int	child(int fdin, int fdout, char *cmd, char **envp, int fdclose)
 {
-		if (dup2(fdin, STDIN_FILENO) == -1)
-			return (error("failed to duplicate :("));
-		close(fdin);
-		if (dup2(fdout, STDOUT_FILENO) == -1)
-			return (error("failed to duplicate :("));
-		close(fdout);
-		close(fdclose);
-		return (ft_execeve(cmd, envp));
+	if (dup2(fdin, STDIN_FILENO) == -1)
+		return (error("failed to duplicate :("));
+	close(fdin);
+	if (dup2(fdout, STDOUT_FILENO) == -1)
+		return (error("failed to duplicate :("));
+	close(fdout);
+	close(fdclose);
+	return (ft_execeve(cmd, envp));
 }
