@@ -16,7 +16,7 @@ int	main(int ac, char **av, char **envp)
 	int	pipefd[2];
 	int(fd0), (fd1), (id), (id1);
 
-	if (ac != 5)
+	if (ac < 5)
 		return (1);
 	if (pipe(pipefd) == -1)
 		return(error("failed to create a pipe :( "));
