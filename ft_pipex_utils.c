@@ -53,3 +53,10 @@ int	child(int fdin, int fdout, char *cmd, char **envp, int fdclose)
 	close(fdclose);
 	return (ft_execeve(cmd, envp));
 }
+void	finish(int pipefd[2], int id, int id1)
+{
+	close(pipefd[1]);
+	close(pipefd[0]);
+	printf("pid %d\n", waitpid(id, NULL, 0));
+	printf("pid %d\n", waitpid(id1, NULL, 0));
+}
