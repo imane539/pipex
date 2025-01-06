@@ -10,12 +10,14 @@
 /*                                                                            */
 /******************************************************************************/
 
-#include "ft_pipex.h"
+#include "ft_pipex_bonus.h"
 
 int	main(int ac, char **av, char **envp)
 {
 	int	pipefd[2 * (ac - 3 - 1)];
-	int(fd0), (fd1), (id), (id1),(count);
+
+	int id[ac - 3];
+	int(fd0), (fd1), (id),,(count);
 	fd0 = fdesc('r', av[1]);
 	fd1 = fdesc('w', av[ac-1]);
 	if (ac < 5 || fd0 == 1 || fd1 == 1)
@@ -25,12 +27,16 @@ int	main(int ac, char **av, char **envp)
 	{
 		if (pipe(pipefd + count*2) == -1)
 			return (error("failed to create a pipe :( "));
-		count++;
-		id = fork();
-		if (id == -1)
+		id[count] = fork();
+		if (id[count] == -1)
 			return (error("failed to create a child :( "));
-		if (id == 0)
+		if (id[count] == 0)
 			return (child(fd0, pipefd[1], av[2], envp, pipefd[0]));
+		else
+		{
+			count++;
+		}
+
 	}
 	else
 	{

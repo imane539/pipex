@@ -1,4 +1,4 @@
-#include "ft_pipex.h"
+#include "ft_pipex_bonus.h"
 
 int	error(char *msg)
 {
@@ -19,7 +19,7 @@ int	fdesc(char mode, char *file)
 	}
 	if (mode == 'w')
 	{
-		fd = open(file, O_WRONLY );
+		fd = open(file, O_WRONLY);
 		if (fd == -1 || access(file, W_OK) == -1)
 			return (error("you can't write in this file:( "));
 	}
