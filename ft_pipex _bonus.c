@@ -14,24 +14,26 @@
 
 int	main(int ac, char **av, char **envp)
 {
-	int	pipefd[2];
-
-	int(fd0), (fd1), (id), (id1);
-	if (ac < 5)
+	int	pipefd[2 * (ac - 3 - 1)];
+	int(fd0), (fd1), (id), (id1),(count);
+	fd0 = fdesc('r', av[1]);
+	fd1 = fdesc('w', av[ac-1]);
+	if (ac < 5 || fd0 == 1 || fd1 == 1)
 		return (1);
-	if (pipe(pipefd) == -1)
-		return (error("failed to create a pipe :( "));
-	if ((fd0 = fdesc('r', av[1])) == 1)
-		return (1);
-	id = fork();
-	if (id == -1)
-		return (error("failed to create a child :( "));
-	if (id == 0)
-		return (child(fd0, pipefd[1], av[2], envp, pipefd[0]));
+	count = 0;
+	while(count < ac - 3 - 1)
+	{
+		if (pipe(pipefd + count*2) == -1)
+			return (error("failed to create a pipe :( "));
+		count++;
+		id = fork();
+		if (id == -1)
+			return (error("failed to create a child :( "));
+		if (id == 0)
+			return (child(fd0, pipefd[1], av[2], envp, pipefd[0]));
+	}
 	else
 	{
-		if ((fd1 = fdesc('w', av[4])) == 1)
-			return (1);
 		id1 = fork();
 		if (id1 == -1)
 			return (error("failed to create a child 2:( "));

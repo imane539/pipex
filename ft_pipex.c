@@ -18,7 +18,8 @@ int	main(int ac, char **av, char **envp)
 
 	int (fd0), (fd1), (id), (id1);
 	fd0 = fdesc('r', av[1]);
-	if (ac != 5 || fd0 == 1)
+	fd1 = fdesc('w', av[ac-1]);
+	if (ac != 5 || fd0 == 1 || fd1 == 1)
 		return (1);
 	if (pipe(pipefd) == -1)
 		return (error("failed to create a pipe :( "));
@@ -29,9 +30,6 @@ int	main(int ac, char **av, char **envp)
 		return (child(fd0, pipefd[1], av[2], envp, pipefd[0]));
 	else
 	{
-		fd1 = fdesc('w', av[4]);
-		if (fd1 == 1)
-			return (1);
 		id1 = fork();
 		if (id1 == -1)
 			return (error("failed to create a child 2:( "));
