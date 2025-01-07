@@ -42,16 +42,31 @@ int	ft_execeve(char *cmd, char **envp)
 	return (0);
 }
 
-int	child(int fdin, int fdout, char *cmd, char **envp, int fdclose)
+int	child(t_data data,int fdclose,int pipefd[2])
 {
-	if (dup2(fdin, STDIN_FILENO) == -1)
+	int (fd),(out),(in);
+
+	fd = fdesc(data.id, data.file);
+	if(fd == 1)
+		exit(1);
+	if(data.id == 'r')
+	{
+		in = fd;
+		out = pipefd[1];
+	}
+	else
+	{
+		in = pipefd[0];
+		out = fd;
+	}
+	if (dup2(in, STDIN_FILENO) == -1)
 		return (error("failed to duplicate :("));
-	close(fdin);
-	if (dup2(fdout, STDOUT_FILENO) == -1)
+	close(in);
+	if (dup2(out, STDOUT_FILENO) == -1)
 		return (error("failed to duplicate :("));
-	close(fdout);
+	close(out);
 	close(fdclose);
-	return (ft_execeve(cmd, envp));
+	return (ft_execeve(data.cmd, data.envp));
 }
 void	finish(int pipefd[2], int id, int id1)
 {

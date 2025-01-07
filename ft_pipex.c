@@ -6,7 +6,7 @@
 /*   By: iel-fouh <iel-fouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 14:33:46 by iel-fouh          #+#    #+#             */
-/*   Updated: 2025/01/04 18:41:39 by iel-fouh         ###   ########.fr       */
+/*   Updated: 2025/01/07 16:31:16 by iel-fouh         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -16,10 +16,8 @@ int	main(int ac, char **av, char **envp)
 {
 	int	pipefd[2];
 
-	int (fd0), (fd1), (id), (id1);
-	fd0 = fdesc('r', av[1]);
-	fd1 = fdesc('w', av[ac-1]);
-	if (ac != 5 || fd0 == 1 || fd1 == 1)
+	int (id), (id1);
+	if (ac != 5)
 		return (1);
 	if (pipe(pipefd) == -1)
 		return (error("failed to create a pipe :( "));
@@ -27,14 +25,28 @@ int	main(int ac, char **av, char **envp)
 	if (id == -1)
 		return (error("failed to create a child :( "));
 	if (id == 0)
-		return (child(fd0, pipefd[1], av[2], envp, pipefd[0]));
+	{
+		t_data data;
+		data.id = 'r';
+		data.cmd=av[2];
+		data.envp=envp;
+		data.file= av[1];
+		return (child(data, pipefd[0],pipefd));
+	}
 	else
 	{
 		id1 = fork();
 		if (id1 == -1)
 			return (error("failed to create a child 2:( "));
 		if (id1 == 0)
-			return (child(pipefd[0], fd1, av[3], envp, pipefd[1]));
+		{
+			t_data data;
+			data.id = 'w';
+			data.cmd=av[3];
+			data.envp=envp;
+			data.file=av[ac-1];
+			return (child(data,pipefd[1],pipefd));
+		}
 		finish(pipefd, id, id1);
 	}
 }
