@@ -74,7 +74,9 @@ int	first_last(t_data data, int fdclose, int pipefd[2])
 	else
 		out = fd;
 	if (dup2(out, STDOUT_FILENO) == -1)
-		close(out);
+			error("failed to duplicate 4:(");
+
+	close(out);
 	close(fdclose);
 	return (ft_execeve(data.cmd, data.envp));
 }
